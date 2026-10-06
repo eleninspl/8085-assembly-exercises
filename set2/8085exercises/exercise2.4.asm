@@ -33,7 +33,8 @@ START:
 	RRC		; A= 000(A2)0000
 	XRA D		; A= 000(B2 XOR A2)0000
 	RRC		; A= 0000(B2 XOR A2)000
-	MOV D,A		; D= 0000(B2 XOR A2)000
+	RRC		; A= 00000(B2 XOR A2)00
+	MOV D,A		; D= 00000(B2 XOR A2)00
 
 	MOV A,B 	; restore input
 	ANI 40H		; isolate B3

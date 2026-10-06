@@ -102,7 +102,7 @@ Open an `.asm` file in the simulator, assemble it and run it. Set the inputs wit
 
 The four high LEDs must stay off.
 
-**How it works.** Each input pair is isolated with `ANI` and lined up with a rotate. The pair is combined with `ANA` or `XRA`, and the results are merged into one byte and inverted for output. X0 and X1 are correct; X2 and X3 are not (see [Known limitations](#known-limitations)).
+**How it works.** Each input pair is isolated with `ANI` and lined up with a rotate. The pair is combined with `ANA` or `XRA`, and the results are merged into one byte and inverted for output.
 
 ## Set 3: Interrupts
 
@@ -126,10 +126,8 @@ These are answered only in the reports:
 
 ## Known limitations
 
-The code is kept exactly as it was submitted. While writing this README, I reviewed it again and found the issues below:
+The code is kept as it was submitted, apart from two small fixes. In set 2 exercise 3 i, a zero test followed `LDA`, which does not set the flags; it now has `ORA A` first. In set 2 exercise 4, a missing `RRC` put the A2 XOR B2 term in the wrong bit, which made X2 and X3 wrong for half of all inputs. While writing this README, I reviewed the code again and found the issues below:
 
-- **Set 2, exercise 3 i** (`exercise2.3a.asm`): `JNZ ALL_ZEROS` follows `LDA 2000H`, and `LDA` does not set the flags. The jump therefore depends on whatever zero flag the program started with. If it is clear, the LEDs just copy the switches. If it is set, the program works, except that with all switches OFF it loops forever. The intended check is `ORA A` followed by `JZ ALL_ZEROS`.
-- **Set 2, exercise 4** (`exercise2.4.asm`): The A2 XOR B2 term ends up one bit too high, so X2 and X3 are wrong whenever A2 ≠ B2 (half of all inputs). When both XORs are 1, the carry also lights LED 4, which should stay off. One more `RRC` after line 35 fixes it. X0 and X1 are correct.
 - **Set 3, both exercises**: The interrupt handlers end with `JMP WAIT` instead of `RET`, so every interrupt leaves its return address on the stack. This is harmless for a short demo, but the stack grows with each interrupt.
 - **Set 3, exercise 1**: The LEDs change state every 0.5 s, so a full blink takes 1 s. When the time runs out, the display stays at `01` instead of clearing.
 - **Set 3, exercise 2**: The rightmost display (`0B00H`) is never blanked, so it shows whatever byte is in that location. Incrementing the thresholds would wrap a K3 of `FFH` to `00H`; the hard-coded values avoid this.

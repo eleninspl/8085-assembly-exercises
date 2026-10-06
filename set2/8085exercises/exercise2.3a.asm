@@ -1,7 +1,8 @@
 START:
 	MVI B,FEH	; B= 11111110
 	LDA 2000H	; load input
-	JNZ ALL_ZEROS	
+	ORA A		; set flags from A
+	JZ ALL_ZEROS	; if (input==0), all LEDs off
 	
 LOOP1:
 	RRC		; CY= LSB
